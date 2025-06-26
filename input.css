@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+  /* Smooth fade for modal */
+  #modal {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  #modal.flex {
+    opacity: 1;
+  }

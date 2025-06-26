@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Pablo Neyra">
+    <meta property="og:title" content="100 x Djokovic">
+    <meta name="description" content="An interactive gallery showcasing the most decorated active player on the ATP tour, Novak Djokovic. He joins an exclusive group of Open Era athletes to achieve 100 career singles titles.">
+
+    <meta property="og:image" content="https://pab-ns.github.io/100-x-djokovic/imgs/thumb-100xdjokovic_.webp">
+    <meta property="og:url" content="https://pab-ns.github.io/100-x-djokovic/">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:site_name" content="Pablo Neyra">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://pab-ns.github.io/hello/img/favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://pab-ns.github.io/hello/img/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://pab-ns.github.io/hello/img/favicon_io/favicon-16x16.png">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <title>100 x Djokovic</title>
+</head>
+
+
+<body class="bg-neutral-800">
+
+<!-- Acknowledgement Overlay -->
+<div id="acknowledgement-overlay" class="fixed inset-0 bg-neutral-800 flex flex-col items-center justify-center text-center p-8 z-50 transition-opacity duration-700">
+  <div class="max-w-2xl space-y-6 pointer-events-none">
+    <!-- Make inner content not block the click -->
+     <img src="https://pab-ns.github.io/100-x-djokovic/imgs/100-logo.png" alt="" class="mx-auto">
+    <h1 class="text-6xl md:text-8xl font-expand text-tennisGreen font-extrabold uppercase">Djokovic</h1>
+    
+    <p class="text-neutral-300">
+An interactive gallery showcasing the most decorated active player on the ATP tour. With an astonishing collection of titles, Novak Djokovic has firmly cemented his place among the sport’s all-time greats. He now joins an exclusive group of Open Era athletes to achieve 100 career singles titles. A list topped by Martina Navratilova with 167 titles in the women’s game and Jimmy Connors, mens, with 109 titles.
+    </p>
+
+    <p class="text-xxs uppercase text-tennisGreen pt-20">Click anywhere to continue</p>
+  </div>
+</div>
+  <!-- canva -->
+    <main class="w-full hidden flex" id="main-content">
+      <div id="canvas-wrapper" class="h-screen overflow-scroll [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div id="canvas-content" class="origin-top-left transition-transform duration-100">
+          <section class="grid md:grid-cols-10 grid-cols-3 gap-0 w-full h-full" id="character-img"></section>
+          </div>
+      </div>
+    </main>
+
+    <!-- modal -->
+    <section id="modal" class="fixed inset-0 z-50 hidden flex items-center justify-center text-neutral-800" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
+
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true"></div>
+
+    <!-- modal content -->
+    <div class="container mx-auto max-w-xs bg-white rounded-lg shadow-2xl py-10" id="modal-content">
+      <div>
+        <p class="font-bold text-xxs uppercase mb-0.5 text-center">Title N°</p>
+        <p class="text-4xl text-center font-mono">#<span id="modal-counter"></span></p>
+      </div>
+      
+      <div class="space-y-1 mt-4">
+        <div class="flex justify-center text-xxs text-center">
+          <span id="modal-date" class="pr-1"></span>
+          <span id="modal-year"></span>
+          <span class="mx-2">–</span>
+          <span id="modal-location"></span>
+        </div>
+        <p class="text-sm text-center">ATP Ranking: #<span id="modal-ranking"></span></p>
+      </div>
+
+      <div class="grid grid-cols-2 my-5 gap-2 gap-y-5">
+        <!-- tournament -->
+          <div class="flex flex-col items-center">
+            <p class="font-bold text-xxs uppercase mb-0.5">Tournament</p>
+            <p class="text-center" id="modal-tournament"></p>
+          </div>
+        <!-- surface -->
+          <div class="flex flex-col items-center">
+            <p class="font-bold text-xxs uppercase mb-0.5">Surface</p>
+            <p class="rounded-full px-6 py-0.5 border bg-yellow-700 text-white text-sm" id="modal-surface"></p>
+          </div>              
+        <!-- opponent -->
+          <div class="flex flex-col items-center">
+            <p class="font-bold text-xxs uppercase mb-0.5">Opponent</p>
+            <div class="flex items-center">
+              <img src="" alt="" class="rounded-full h-4 mr-2" id="modal-flag">
+              <p id="modal-opponent"></p>
+            </div>
+          </div>
+        <!-- score -->
+          <div class="flex flex-col items-center">
+            <p class="font-bold text-xxs uppercase mb-0.5">Score</p>
+            <p id="modal-score"></p>
+          </div>    
+      </div>
+      <img src="" alt="" class="mx-auto" id="modal-logo">
+    </div>
+    <!-- end modal content -->
+
+    </section>
+
+    <!-- footer -->
+    <section class="mx-auto bg-black text-tennisGreen text-center py-4 space-y-0">
+  <span class="font-bold tracking-widest uppercase hover:opacity-80 transition-all duration-200"> <a href="https://www.pneyra.work" target="_blank">Pablo Neyra</a></span>
+  <p class="text-xxs">© <span id="date"></span></p>
+      <script>
+    window.onload = function () {
+      var date = new Date();
+      document.getElementById("date").innerHTML = date.getFullYear();
+    };
+  </script>   
+    </section>
+
+<script>
+    const overlay = document.getElementById('acknowledgement-overlay');
+  const mainContent = document.getElementById('main-content');
+
+  // Listen to click anywhere on the overlay
+  overlay.addEventListener('click', () => {
+    // Fade out overlay
+    overlay.classList.add('opacity-0');
+    setTimeout(() => {
+      overlay.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+    }, 700); // Match duration-500 of transition
+  });
+
+
+const characterImgContainer = document.getElementById('character-img');
+const modal = document.getElementById('modal');
+const modalCounter = document.getElementById('modal-counter');
+const modalDate = document.getElementById('modal-date');
+const modalYear = document.getElementById('modal-year');
+const modalLocation = document.getElementById('modal-location');
+const modalRanking = document.getElementById('modal-ranking');
+const modalTournament = document.getElementById('modal-tournament');
+const modalSurface = document.getElementById('modal-surface');
+const modalFlag = document.getElementById('modal-flag'); // <img>
+const modalOpponent = document.getElementById('modal-opponent');
+const modalScore = document.getElementById('modal-score');
+const modalLogo = document.getElementById('modal-logo'); // <img>
+
+// Mapping of surface to CSS classes
+const surfaceColorMap = {
+  'Hard': 'bg-blue-500',
+  'Clay': 'bg-yellow-700',
+  'Grass': 'bg-green-700'
+};
+
+// Utility function to parse CSV text
+function parseCSV(csvText) {
+  const [headerLine, ...lines] = csvText.trim().split("\n");
+  const headers = headerLine.split(",");
+
+  return lines.map(line => {
+    const values = line.split(",");
+    return headers.reduce((obj, header, i) => {
+      obj[header.trim()] = values[i]?.trim() ?? ''; // Fallback empty string if undefined
+      return obj;
+    }, {});
+  });
+}
+
+// Function to open modal
+function openModal() {
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+// Function to close modal
+function closeModal() {
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+// Load CSV and populate DOM
+fetch('data100.csv')
+  .then(res => res.text())
+  .then(csvText => {
+    const data = parseCSV(csvText);
+
+    data.forEach(character => {
+      const img = document.createElement('img');
+      img.src = character.img;
+      img.className = 'aspect-square object-cover opacity-25 hover:opacity-100 transition-all duration-300 cursor-pointer';
+
+      img.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent click from bubbling
+
+        // Update modal
+        modalCounter.textContent = character.counter;
+        modalDate.textContent = character.date;
+        modalYear.textContent = character.year;
+        modalLocation.textContent = character.location;
+        modalRanking.textContent = character.ranking;
+        modalTournament.textContent = character.tournament;
+        modalSurface.textContent = character.surface;
+        modalOpponent.textContent = character.opponent;
+        modalScore.textContent = character.score;
+        // IMAGE elements → use .src
+        modalFlag.src = character.flag;
+        modalLogo.src = character.logo;
+
+        // Remove any existing bg-* classes (you could be more precise with regex if needed)
+modalSurface.classList.remove('bg-blue-500', 'bg-yellow-700', 'bg-green-700');
+
+// Add the correct class
+const surfaceClass = surfaceColorMap[character.surface] || 'bg-blue-500'; // fallback
+modalSurface.classList.add(surfaceClass);
+
+// Update surface text
+modalSurface.textContent = character.surface;
+
+
+
+        // Reset all image opacities
+        const allImages = characterImgContainer.querySelectorAll('img');
+        allImages.forEach(image => {
+          image.classList.remove('opacity-100');
+          image.classList.add('opacity-25');
+        });
+
+        // Highlight selected image
+        img.classList.remove('opacity-25');
+        img.classList.add('opacity-100');
+
+        // Open modal
+        openModal();
+      });
+
+      characterImgContainer.appendChild(img);
+    });
+  })
+  .catch(err => {
+    console.error('Error loading or parsing CSV:', err);
+  });
+
+// Close modal when clicking anywhere outside modal content
+modal.addEventListener('click', closeModal);
+
+// Prevent modal content click from closing modal
+const modalContent = modal.querySelector('#modal-content');
+modalContent.addEventListener('click', (event) => {
+  event.stopPropagation();
+});
+
+
+
+  // Canvas
+const canvasWrapper = document.getElementById("canvas-wrapper");
+const canvasContent = document.getElementById("canvas-content");
+
+let scale = 1; // Start more zoomed-in
+
+// Apply initial zoom
+canvasContent.style.transform = `scale(${scale})`;
+
+// Wait for content to be laid out
+window.addEventListener("load", () => {
+  // Center content inside wrapper after zoom
+  const wrapperRect = canvasWrapper.getBoundingClientRect();
+  const contentWidth = canvasContent.offsetWidth * scale;
+  const contentHeight = canvasContent.offsetHeight * scale;
+
+  // Scroll to center
+  canvasWrapper.scrollLeft = (contentWidth - wrapperRect.width) / 2;
+  canvasWrapper.scrollTop = (contentHeight - wrapperRect.height) / 2;
+});
+
+// Zoom with trackpad (or ctrl + mouse wheel)
+canvasWrapper.addEventListener("wheel", (e) => {
+  if (!e.ctrlKey) return;
+
+  e.preventDefault();
+  const zoomSpeed = 0.01;
+  scale -= e.deltaY * zoomSpeed;
+  scale = Math.min(Math.max(0.2, scale), 3); // Clamp zoom range
+
+  canvasContent.style.transform = `scale(${scale})`;
+}, { passive: false });
+</script>
+
+</body>
+</html>
